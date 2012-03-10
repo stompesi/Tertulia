@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>New Web Project</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<style type="text/css">
+			img{
+				height : 80 px;
+				width:  80px;
+			}
+		</style>
+	</head>
+	<body>
+		<table border="1">
+			<tr>
+				<td><img id="1" /></td>
+				<td><img id="2" /></td>
+				<td><img id="3" /></td>
+				<td><img id="4" /></td>
+			</tr>
+			<tr>
+				<td><img id="5" /></td>
+				<td><img id="6" /></td>
+				<td><img id="7" /></td>
+				<td><img id="8" /></td>
+			</tr>
+			<tr>
+				<td><img id="9" /></td>
+				<td><img id="10" /></td>
+				<td><img id="11" /></td>
+				<td><img id="12" /></td>
+			</tr>
+			<tr>
+				<td><img id="13" /></td>
+				<td><img id="14" /></td>
+				<td><img id="15" /></td>
+				<td><img id="16" /></td>
+			</tr>
+		</table>
+	</body>
+</html>
+<script type="text/javascript">
+	var check = {
+		checkId : "",
+		order : ""
+	};
+	var card = [];
+	for(var i = 1; i < 17; i++) {
+		card[i] = {
+			order : i,
+			cardId : "",
+			evert : 0
+		};
+		$('#' + card[i].order + '').attr('src', "background.jpg");
+	}
+	for(var i = 1; i < 17; i++) {
+		card[i].cardId = rand();
+		for(var j = 1, ok = 0; j < 17; j++) {
+			if(card[i].cardId == card[j].cardId && i != j) {
+				ok++;
+				if(ok > 1) {
+					i--;
+					break;
+				}
+			}
+		}
+	}
+	for(var i = 1; i < 17; i++) {
+		console.log(card[i].cardId);
+	}
+	$('img').click(function() {
+		if(card[this.id].evert == 0) {
+			card[this.id].evert = 1;
+			showCard(this.id, +card[this.id].cardId+".jpg");
+			if(check.checkId == "") {
+				check.checkId = card[this.id].cardId;
+				check.order = card[this.id].order;
+			} else {
+				//alert(typeof(check.checkId));
+				$("#" + check.order).delay(1500);
+				if(check.checkId == card[this.id].cardId) {
+					check.checkId = "";
+				} else {
+					showCard(card[this.id].order, "background.jpg");
+					showCard(check.order, "background.jpg");
+					card[this.id].evert = 0;
+					card[check.order].evert = 0;
+					check.checkId = "";
+				}
+			}
+		}
+	});
+	function showCard(id, atrribute) {
+		$("#" + id).fadeOut(500, function() {
+			$("#" + id).attr('src', atrribute);
+		});
+		$("#" + id).fadeIn(1000);
+	}
+	function rand(cardId) {
+		return Math.ceil(Math.random() * 8);
+	}
+</script>
