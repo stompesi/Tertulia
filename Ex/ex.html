@@ -80,6 +80,7 @@
 					$("#" + check.sequence).delay(500);
 					if(check.id == card[this.id].id) {
 						check.id = "";
+						checkFinishGame();
 					} else {
 						showCard(card[this.id].sequence, "background.jpg", 200, 300);
 						showCard(check.sequence, "background.jpg", 200, 300);
