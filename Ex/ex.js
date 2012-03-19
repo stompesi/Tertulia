@@ -1,11 +1,16 @@
 //alert($('input#selectMapSize').val());
 //tr의 아이디를 정함
-$('#start').click(function() {
-	var mapSize;
+
+window.onload= function(){
+	$('#start').bind('click',start);
+};
+
+var mapSize;
+function start() {
+	
 	//게임맵을 그림
 	drawMap();
 
-	alert("a");
 	var check = {
 		id : '',
 		sequence : ''
@@ -49,7 +54,7 @@ $('#start').click(function() {
 			}
 		}
 	});
-});
+}
 function drawMap() {
 	$('#gameMap').children().remove();
 	mapSize = $('#selectMapSize').val();
@@ -72,19 +77,23 @@ function makeCards(cards) {
 		};
 	}
 	for(var i=1; i<=mapSize/2; i++){
-		randomId[i]= random(100);
+		
+		randomId[i]= random(50);
 		for(var j = 1 ; j<= mapSize/2 ; j++){
 			if(i!=j && randomId[i]==randomId[j] ){
 				i--;
 				break;
 			}
 		}
+		
 	}
 	for(var i = 1 ,j=0; i <= mapSize; i++) {
-		var ransequence = randSequence(mapSize);
-		if(i%2==1)
-			j++;
+		var ransequence = random(mapSize);
+		
 		if(cards[ransequence].id == "") {
+			if(i%2==1){
+				j++;
+			}
 			cards[ransequence].id = randomId[j] ;//i % (Math.pow(mapSize, 0.5) * 2) + 1;
 		} else {
 			i--;
