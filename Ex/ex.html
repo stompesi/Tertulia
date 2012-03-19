@@ -5,19 +5,19 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>New Web Project</title>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-		<style type="text/css">
+		<style>
 			img {
-				height: 80px;
-				width: 80px;
+				height: 50px;
+				width: 50px;
 			}
 		</style>
 	</head>
 	<body>
 		<select id="selectMapSize">
-			<option value="4">4 x 4</option>
-			<option value="6">6 x 6</option>
-			<option value="8">8 x 8</option>
-			<option value="10">10 x 10</option>
+			<option value="16">4 x 4</option>
+			<option value="36">6 x 6</option>
+			<option value="64">8 x 8</option>
+			<option value="100">10 x 10</option>
 		</select>
 		<br />
 		<input type="button" id="start" value="Game Start" />
@@ -28,92 +28,115 @@
 <script type="text/javascript">
 	//alert($('input#selectMapSize').val());
 	//tr의 아이디를 정함
-	var trId = 100;
 	var mapSize;
 	$('#start').click(function() {
-		$('#gameMap').remove();
-		$('body').append('<table id= "gameMap" border="1"></table>');
-		mapSize = $('#selectMapSize').val();
-		for(var i = 1, trId = 100; i < Math.pow(mapSize, 2) + 1; i++) {
-			if(i % mapSize == 1) {
-				$('#gameMap').append("<tr id =" + (++trId) + "></tr>");
-			}
-			$('#' + trId).append("<td><img id=" + i + " src='background.jpg'/></td>");
-		}
-		var check = {
-			id : "",
-			sequence : ""
-		};
-		var card = [];
 
-		for(var i = 1; i < Math.pow(mapSize, 2) + 1; i++) {
-			card[i] = {
+		//게임맵을 그림
+		drawMap();
+
+		var check = {
+			id : '',
+			sequence : ''
+		};
+
+		//카드를 만듬
+		var cards = [];
+		makeCards(cards);
+
+		//카드전체 보여주기
+		showAllCards(cards);
+
+		//카드 아이디 보여주기 (삭제예정)
+		for(var i = 1; i <= mapSize; i++) {
+			console.log(cards[i].id);
+		}
+		
+		$('img').click(function() {
+		var sequence = this.id;
+		var fadeInSpeed = 300;
+		var fadeOutSpeed = 200;
+		var delaySpeed = 500;
+		if(cards[sequence].isEvert) {
+			cards[sequence].isEvert = false;
+			showCard(sequence, +cards[sequence].id + ".jpg", fadeOutSpeed, fadeInSpeed);
+			if(check.id == "") {
+				check.id = cards[sequence].id;
+				check.sequence = cards[sequence].sequence;
+			} else {
+				$('#' + check.sequence).delay(delaySpeed);
+				if(check.id == cards[sequence].id) {
+					check.id = "";
+					checkFinishGame(cards);
+				} else {
+					showCard(cards[sequence].sequence, "background.jpg", fadeOutSpeed, fadeInSpeed);
+					showCard(check.sequence, "background.jpg", fadeOutSpeed, fadeInSpeed);
+					cards[sequence].isEvert = true;
+					cards[check.sequence].isEvert = true;
+					check.id = "";
+				}
+			}
+		}
+	});
+
+	});
+	function drawMap() {
+		$('#gameMap').children().remove();
+		mapSize = $('#selectMapSize').val();
+		for(var i = 1; i <= mapSize; i++) {
+			if(i % Math.pow(mapSize, 0.5) == 1) {
+				var trId = $('<tr/>');
+				$('#gameMap').append(trId);
+			}
+			$(trId).append('<td><img id=' + i + ' src="background.jpg"/></td>');
+		}
+	}
+
+	function makeCards(cards) {
+		for(var i = 1; i <= mapSize; i++) {
+			cards[i] = {
 				sequence : i,
-				id : "",
-				evert : 'ture'
+				id : '',
+				isEvert : true
 			};
 		}
-		for(var i = 1; i < Math.pow(mapSize, 2) + 1; i++) {
-			var sequence = randSequence();
-			if(card[sequence].id == "") {
-				card[sequence].id = i % (mapSize * 2) + 1;
+		for(var i = 1; i <= mapSize; i++) {
+			var ransequence = randSequence();
+			if(cards[ransequence].id == "") {
+				cards[ransequence].id = i % (Math.pow(mapSize, 0.5) * 2) + 1;
 			} else {
 				i--;
 			}
 		}
-		for(var i = 1; i < Math.pow(mapSize, 2) + 1; i++) {
-			showCard(card[i].sequence, card[i].id + ".jpg", 500, 1000);
-			showCard(card[i].sequence, "background.jpg", 500, 1000);
-		}
+	}
 
-		for(var i = 1; i < Math.pow(mapSize, 2) + 1; i++) {
-			console.log(card[i].id);
-		}
-		$('img').click(function() {
-			if(card[this.id].evert) {
-				card[this.id].evert = false;
-				showCard(this.id, +card[this.id].id + ".jpg", 200, 300);
-				if(check.id == "") {
-					check.id = card[this.id].id;
-					check.sequence = card[this.id].sequence;
-				} else {
-					$("#" + check.sequence).delay(500);
-					if(check.id == card[this.id].id) {
-						check.id = "";
-						checkFinishGame();
-					} else {
-						showCard(card[this.id].sequence, "background.jpg", 200, 300);
-						showCard(check.sequence, "background.jpg", 200, 300);
-						card[this.id].evert = 'ture';
-						card[check.sequence].evert = 'ture';
-						check.id = "";
-					}
-				}
-			}
+	function showCard(id, atrributeValue, fadeOutSpeed, fadeInSpeed) {
+		$('#' + id).fadeOut(fadeOutSpeed, function() {
+			$('#' + id).attr('src', atrributeValue);
 		});
-		function showCard(id, atrribute, fadeOutSpeed, fadeInSpeed) {
-			$("#" + id).fadeOut(fadeOutSpeed, function() {
-				$("#" + id).attr('src', atrribute);
-			});
-			$("#" + id).fadeIn(fadeInSpeed);
-		}
+		$('#' + id).fadeIn(fadeInSpeed);
+	}
 
-		function randSequence() {
-			return Math.ceil(Math.random() * Math.pow(mapSize, 2));
-		}
+	function randSequence() {
+		return Math.ceil(Math.random() * mapSize);
+	}
 
-		function checkFinishGame() {
-			for(var i = 1; i < Math.pow(mapSize, 2) + 1; i++) {
-				if(card[i].evert== false){
-					if(i==Math.pow(mapSize, 2))
-					alert("게임을 완료하였습니다.");
-				}
-				else{
-					break;
-				}
+	function checkFinishGame(cards) {
+		for(var i = 1; i <= mapSize; i++) {
+			if(cards[i].isEvert == false) {
+				if(i == mapSize)
+					alert('게임을 완료하였습니다.');
+			} else {
+				break;
 			}
 		}
+	}
 
-	});
-
+	function showAllCards(cards) {
+		var fadeInSpeed = 1000;
+		var fadeOutSpeed = 500;
+		for(var i = 1; i <= mapSize; i++) {
+			showCard(i, cards[i].id + ".jpg", fadeOutSpeed, fadeInSpeed);
+			showCard(i, "background.jpg", fadeOutSpeed, fadeInSpeed);
+		}
+	}
 </script>
