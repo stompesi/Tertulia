@@ -1,41 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>New Web Project</title>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-		<script type="text/javascript" src="ex.js"></script>
-		<style>
-			img {
-				height: 50px;
-				width: 50px;
-			}
-		</style>
-	</head>
-	<body>
-		<select id="selectMapSize">
-			<option value="16">4 x 4</option>
-			<option value="36">6 x 6</option>
-			<option value="64">8 x 8</option>
-			<option value="100">10 x 10</option>
-		</select>
-		<br />
-		<input type="button" id="start" value="Game Start" />
-		<input type="button" id="rank" value="순위" />
-		<table id= "gameMap" border="1"></table>
-	</body>
-</html>
-<script type="text/javascript">
-	//alert($('input#selectMapSize').val());
+//alert($('input#selectMapSize').val());
 //tr의 아이디를 정함
-var mapSize;
 $('#start').click(function() {
-	
+	var mapSize;
 	//게임맵을 그림
 	drawMap();
 
-	
+	alert("a");
 	var check = {
 		id : '',
 		sequence : ''
@@ -102,22 +72,19 @@ function makeCards(cards) {
 		};
 	}
 	for(var i=1; i<=mapSize/2; i++){
-		randomId[i]= random(50);
+		randomId[i]= random(100);
 		for(var j = 1 ; j<= mapSize/2 ; j++){
 			if(i!=j && randomId[i]==randomId[j] ){
 				i--;
 				break;
 			}
 		}
-		
 	}
 	for(var i = 1 ,j=0; i <= mapSize; i++) {
-		var ransequence = random(mapSize);
-		
+		var ransequence = randSequence(mapSize);
+		if(i%2==1)
+			j++;
 		if(cards[ransequence].id == "") {
-			if(i%2==1){
-				j++;
-			}
 			cards[ransequence].id = randomId[j] ;//i % (Math.pow(mapSize, 0.5) * 2) + 1;
 		} else {
 			i--;
@@ -155,5 +122,3 @@ function showAllCards(cards) {
 		showCard(i, "background.jpg", fadeOutSpeed, fadeInSpeed);
 	}
 }
-</script>
-
