@@ -1,0 +1,47 @@
+info it worked if it ends with ok
+verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+verbose cli   'install',
+verbose cli   'clog' ]
+info using npm@1.1.0-alpha-6
+info using node@v0.6.5
+verbose config file C:\Users\HDM\.npmrc
+verbose config file C:\Program Files\nodejs\etc\npmrc
+verbose config file C:\Program Files\nodejs\node_modules\npm\npmrc
+verbose mkdir done: C:\Users\HDM\git\Tertulia 755
+verbose caching C:\Users\HDM\git\Tertulia\package.json
+verbose loadDefaults application-name@0.0.1
+verbose caching C:\Users\HDM\git\Tertulia\node_modules\ejs\package.json
+verbose loadDefaults ejs@0.6.1
+verbose caching C:\Users\HDM\git\Tertulia\node_modules\express\package.json
+verbose loadDefaults express@2.5.8
+verbose from cache C:\Users\HDM\git\Tertulia\package.json
+verbose into C:\Users\HDM\git\Tertulia [ 'clog' ]
+verbose cache add clog
+verbose cache add [ 'clog', null ]
+silly cache add: name, spec, args [ undefined, 'clog', [ 'clog', null ] ]
+verbose parsed url { pathname: 'clog', path: 'clog', href: 'clog' }
+info addNamed [ 'clog', '' ]
+verbose addNamed [ null, '' ]
+verbose GET clog
+verbose raw, before any munging clog
+verbose url resolving [ 'https://registry.npmjs.org/', './clog' ]
+verbose url resolved https://registry.npmjs.org/clog
+verbose etag "AAO03B50383H9VIMEFGXB4PJO"
+ERR! Error: connect Unknown system errno 10060
+ERR!     at errnoException (net.js:616:11)
+ERR!     at Object.afterConnect [as oncomplete] (net.js:607:18)
+ERR! Report this *entire* log at:
+ERR!     <http://github.com/isaacs/npm/issues>
+ERR! or email it to:
+ERR!     <npm-@googlegroups.com>
+ERR! 
+ERR! System Windows_NT 6.1.7601
+ERR! command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "clog"
+ERR! cwd C:\Users\HDM\git\Tertulia
+ERR! node -v v0.6.5
+ERR! npm -v 1.1.0-alpha-6
+ERR! syscall connect
+ERR! code Unknown system errno 10060
+ERR! message connect Unknown system errno 10060
+verbose exit [ 1, true ]

@@ -5,12 +5,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>New Web Project</title>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-		<style type="text/css">
-			img {
-				height: 80px;
-				width: 80px;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="cardGame.css"></link>
 	</head>
 	<body>
 		<select id="selectMapSize">
@@ -34,12 +29,15 @@
 		$('#gameMap').remove();
 		$('body').append('<table id= "gameMap" border="1"></table>');
 		mapSize = $('#selectMapSize').val();
+		
 		for(var i = 1, trId = 100; i < Math.pow(mapSize, 2) + 1; i++) {
 			if(i % mapSize == 1) {
 				$('#gameMap').append("<tr id =" + (++trId) + "></tr>");
 			}
-			$('#' + trId).append("<td><img id=" + i + " src='background.jpg'/></td>");
+			$('#' + trId).append("<td><img id=" + i + " src='background.jpg' class='cardImg'/></td>");
 		}
+		
+		cardImgSizeChange(mapSize);
 		var check = {
 			id : "",
 			sequence : ""
@@ -115,5 +113,6 @@
 		}
 
 	});
+
 
 </script>
