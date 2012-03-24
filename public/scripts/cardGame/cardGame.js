@@ -13,6 +13,7 @@ $(document).ready(function(){
 });
 
 var mapSize;
+var IMG_PATH = "/images/cardGame/";
 
 function start() {
 
@@ -43,7 +44,7 @@ function start() {
 		var delaySpeed = 500;
 		if(cards[sequence].isEvert) {
 			cards[sequence].isEvert = false;
-			showCard(sequence, +cards[sequence].id + ".jpg", fadeOutSpeed, fadeInSpeed);
+			showCard(sequence, IMG_PATH+cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
 			if(check.id == "") {
 				check.id = cards[sequence].id;
 				check.sequence = cards[sequence].sequence;
@@ -53,8 +54,8 @@ function start() {
 					check.id = "";
 					checkFinishGame(cards);
 				} else {
-					showCard(cards[sequence].sequence, "background.jpg", fadeOutSpeed, fadeInSpeed);
-					showCard(check.sequence, "background.jpg", fadeOutSpeed, fadeInSpeed);
+					showCard(cards[sequence].sequence, IMG_PATH+"background.png", fadeOutSpeed, fadeInSpeed);
+					showCard(check.sequence, IMG_PATH+"background.png", fadeOutSpeed, fadeInSpeed);
 					cards[sequence].isEvert = true;
 					cards[check.sequence].isEvert = true;
 					check.id = "";
@@ -72,7 +73,7 @@ function drawMap() {
 			var trId = $('<tr/>');
 			$('#gameMap').append(trId);
 		}
-		$(trId).append('<td><img id=' + i + ' src="background.jpg"/></td>');
+		$(trId).append('<td><img id=' + i + ' src='+IMG_PATH+'background.png"/></td>');
 	}
 }
 
@@ -87,7 +88,7 @@ function makeCards(cards) {
 	}
 	for(var i=1; i<=mapSize/2; i++){
 
-		randomId[i]= random(50);
+		randomId[i]= random(283);
 		for(var j = 1 ; j<= mapSize/2 ; j++){
 			if(i!=j && randomId[i]==randomId[j] ){
 				i--;
@@ -136,8 +137,8 @@ function showAllCards(cards) {
 	var fadeInSpeed = 1000;
 	var fadeOutSpeed = 500;
 	for(var i = 1; i <= mapSize; i++) {
-		showCard(i, cards[i].id + ".jpg", fadeOutSpeed, fadeInSpeed);
-		showCard(i, "background.jpg", fadeOutSpeed, fadeInSpeed);
+		showCard(i, IMG_PATH+cards[i].id + ".png", fadeOutSpeed, fadeInSpeed);
+		showCard(i,IMG_PATH+"background.png", fadeOutSpeed, fadeInSpeed);
 	}
 }
 
