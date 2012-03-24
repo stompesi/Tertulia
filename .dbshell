@@ -1,0 +1,18 @@
+use webgameset
+show collections;
+db.stat
+show dbs;
+db.stats();
+show collections;
+db.scores.find();
+db.scores.remove();
+db.scores.find();
+db.scores.count();
+db.scores.remove();
+db.scores.find();
+db.scores.remove();
+db.scores.find();
+db.scores.count();
+db.scores.find();
+db.scores.count();
+db.scores.find();
