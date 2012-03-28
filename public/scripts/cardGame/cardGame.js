@@ -73,10 +73,9 @@ function drawMap() {
 			var trId = $('<tr/>');
 			$('#gameMap').append(trId);
 		}
-		$(trId).append('<td><img id=' + i + ' src='+IMG_PATH+'background.png"/></td>');
+		$(trId).append('<td><img id=' + i + ' src="'+IMG_PATH+'background.png"/></td>');
 	}
 }
-
 function makeCards(cards) {
 	var randomId = [];
 	for(var i = 1; i <= mapSize; i++) {
@@ -95,7 +94,6 @@ function makeCards(cards) {
 				break;
 			}
 		}
-
 	}
 	for(var i = 1 ,j=0; i <= mapSize; i++) {
 		var ransequence = random(mapSize);
@@ -125,8 +123,9 @@ function random(randomSize) {
 function checkFinishGame(cards) {
 	for(var i = 1; i <= mapSize; i++) {
 		if(cards[i].isEvert == false) {
-			if(i == mapSize)
+			if(i == mapSize){
 				alert('게임을 완료하였습니다.');
+			}
 		} else {
 			break;
 		}
@@ -170,7 +169,6 @@ function appendScoreList(scoreObjList){
 	console.dir(scoreObjList);
 	// HTML TABLE 에 데이터 뿌리기 결과 있는경우 와 없는 경우 고려 ex) scoreObjList.length 체크
 }
-
 
 ////////////////////////////////////////////////
 // 게임종료후 이름 / 클리어시간 DB저장 호출 함수

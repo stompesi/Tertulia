@@ -8,13 +8,13 @@ function cardImgSizeChange(mapSize){
 	var cardImg_10X10 = 'cardImg_10X10';
 	
 	switch(mapSize){
-		case 6 :
+		case 36 :
 			className = cardImg_6X6;
 			break;
-		case 8 :
+		case 64 :
 			className = cardImg_8X8;
 			break;
-		case 10 :
+		case 100 :
 			className = cardImg_10X10;
 			break;
 		default :
