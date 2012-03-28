@@ -73,8 +73,9 @@ function drawMap() {
 			var trId = $('<tr/>');
 			$('#gameMap').append(trId);
 		}
-		$(trId).append('<td><img id=' + i + ' src="'+IMG_PATH+'background.png"/></td>');
+		$(trId).append('<td><img class="cardImg"id=' + i + ' src="'+IMG_PATH+'background.png"/></td>');
 	}
+	cardImgSizeChange(mapSize);	
 }
 function makeCards(cards) {
 	var randomId = [];
