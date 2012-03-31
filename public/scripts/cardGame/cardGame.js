@@ -13,9 +13,10 @@ $(document).ready(function() {
 });
 var mapSize;
 var IMG_PATH = "/images/cardGame/";
+var passGameTime = {'id': '','second':0};
 
 function start() {
-
+	
 	//게임맵을 그림
 
 	drawMap();
@@ -32,7 +33,11 @@ function start() {
 	//카드전체 보여주기
 	showAllCards(cards);
 
-	var startTime = new Date().getDate();
+	clearTimeout(passGameTime.id);
+	passGameTime.second = 0;
+	passTime(); 
+	var startTime = new Date().getTime();
+
 	//카드 아이디 보여주기 (삭제예정)
 	for(var i = 1; i <= mapSize; i++) {
 		console.log(cards[i].id);
@@ -137,12 +142,13 @@ function checkFinishGame(cards, startTime) {
 }
 
 function clearGameTime(startTime) {
-	return (new Date().getDate() ) - startTime / 1000;
+
+	return Math.ceil((new Date().getTime() - startTime) / 1000);
 }
 
 function saveResult(clearTime) {
 	var userName = prompt("게임을 완료하였습니다. 아이디를 입력하여 주세요.");
-//	alert(clearTime);
+	alert(clearTime);
 	var url = '/game/card/saveScore';
 	var param = {};
 	param.userName = userName;
@@ -165,6 +171,14 @@ function showAllCards(cards) {
 		showCard(i, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
 	}
 }
+
+function passTime() {
+	$('#time').html(++passGameTime.second);
+	passGameTime.id = setTimeout('passTime()', 1000);
+
+}
+
+///////////////////
 
 function bindGetScoreBtn() {
 	$('#scoreBtn').click(function() {
@@ -194,3 +208,6 @@ function appendScoreList(scoreObjList) {
 	console.dir(scoreObjList);
 	// HTML TABLE 에 데이터 뿌리기 결과 있는경우 와 없는 경우 고려 ex) scoreObjList.length 체크
 }
+
+////
+//http://cbkim.wkhc.ac.kr/dframebox/d_frame95.html//시간계산참고사항//
