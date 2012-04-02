@@ -132,8 +132,8 @@ function checkFinishGame(cards, startTime) {
 	for(var i = 1; i <= mapSize; i++) {
 		if(cards[i].isEvert == false) {
 			if(i == mapSize) {
-				var clearTime = clearGameTime(startTime);
-				saveResult(clearTime);
+				clearTimeout(passGameTime.id);
+				saveResult();
 			}
 		} else {
 			break;
@@ -141,18 +141,13 @@ function checkFinishGame(cards, startTime) {
 	}
 }
 
-function clearGameTime(startTime) {
-
-	return Math.ceil((new Date().getTime() - startTime) / 1000);
-}
-
-function saveResult(clearTime) {
+function saveResult() {
 	var userName = prompt("게임을 완료하였습니다. 아이디를 입력하여 주세요.");
-	alert(clearTime);
 	var url = '/game/card/saveScore';
+	alert(passGameTime.second);
 	var param = {};
 	param.userName = userName;
-	param.clearTime = clearTime;
+	param.clearTime = passGameTime.second;
 
 	$.get(url, param, function(result) {
 		if(result) {
@@ -173,12 +168,12 @@ function showAllCards(cards) {
 }
 
 function passTime() {
-	$('#time').html(++passGameTime.second);
+	$('#time').html(passGameTime.second++);
 	passGameTime.id = setTimeout('passTime()', 1000);
 
 }
 
-///////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 function bindGetScoreBtn() {
 	$('#scoreBtn').click(function() {
