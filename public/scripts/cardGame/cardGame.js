@@ -35,7 +35,8 @@ function start() {
 
 	clearTimeout(passGameTime.id);
 	passGameTime.second = 0;
-	passTime(); 
+	appendTimeArea(); // p태그 time 경과시간 엘리먼트 append
+	passTime(); // 시간 경과 시작
 	var startTime = new Date().getTime();
 
 	//카드 아이디 보여주기 (삭제예정)
@@ -167,10 +168,18 @@ function showAllCards(cards) {
 	}
 }
 
+function appendTimeArea(){
+	if ( $('#time').length > 0 ){
+		return;
+	}
+	var clearTime = $('<span/>').attr('id', 'time');
+	var timeArea = $('<p/>').append('경과시간 : ').append(clearTime).append(' 초 ');
+	$('#gameMap').before(timeArea);
+}
+
 function passTime() {
 	$('#time').html(passGameTime.second++);
 	passGameTime.id = setTimeout('passTime()', 1000);
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
