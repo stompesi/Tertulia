@@ -43,32 +43,59 @@ function start() {
 	for(var i = 1; i <= mapSize; i++) {
 		console.log(cards[i].id);
 	}
-	$('img').click(function() {
+	
+	var fadeInSpeed = 100;
+	var fadeOutSpeed = 100;
+	var delaySpeed = fadeInSpeed + fadeOutSpeed;
+	$('.cardImg').delegate('', 'click', function(event){
+		alert('클릭됨');
+		event.stopPropagation();
 		var sequence = this.id;
-		var fadeInSpeed = 300;
-		var fadeOutSpeed = 200;
-		var delaySpeed = 500;
-		if(cards[sequence].isEvert) {
-			cards[sequence].isEvert = false;
+		if(!cards[sequence].isEvert) {
+			cards[sequence].isEvert = true;
 			showCard(sequence, IMG_PATH + cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
-			if(check.id == "") {
+			if(!check.id) {
 				check.id = cards[sequence].id;
-				check.sequence = cards[sequence].sequence;
+				check.sequence = sequence;
 			} else {
-				$('#' + check.sequence).delay(delaySpeed);
+				//$('#' + check.sequence).delay(delaySpeed);
 				if(check.id == cards[sequence].id) {
-					check.id = "";
 					checkFinishGame(cards, startTime);
 				} else {
 					showCard(cards[sequence].sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+					$('#' + check.sequence).delay(delaySpeed);
 					showCard(check.sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
-					cards[sequence].isEvert = true;
-					cards[check.sequence].isEvert = true;
-					check.id = "";
+					cards[sequence].isEvert = false;
+					cards[check.sequence].isEvert = false;
 				}
+				check.id = "";
 			}
 		}
 	});
+	// $('img').click(function(event) {
+// 		
+		// var sequence = this.id;
+		// if(!cards[sequence].isEvert) {
+			// cards[sequence].isEvert = true;
+			// showCard(sequence, IMG_PATH + cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
+			// if(!check.id) {
+				// check.id = cards[sequence].id;
+				// check.sequence = sequence;
+			// } else {
+				// //$('#' + check.sequence).delay(delaySpeed);
+				// if(check.id == cards[sequence].id) {
+					// checkFinishGame(cards, startTime);
+				// } else {
+					// showCard(cards[sequence].sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+					// $('#' + check.sequence).delay(delaySpeed);
+					// showCard(check.sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+					// cards[sequence].isEvert = false;
+					// cards[check.sequence].isEvert = false;
+				// }
+				// check.id = "";
+			// }
+		// }
+	// });
 }
 
 function drawMap() {
@@ -76,26 +103,28 @@ function drawMap() {
 	mapSize = $('#selectMapSize').val();
 	for(var i = 1; i <= mapSize; i++) {
 		if(i % Math.pow(mapSize, 0.5) == 1) {
-			var trId = $('<tr/>');
-			$('#gameMap').append(trId);
+			var tr = $('<tr/>');
+			$('#gameMap').append(tr);
 		}
-		$(trId).append('<td><img class="cardImg"id=' + i + ' src="' + IMG_PATH + 'background.png"/></td>');
+		$(tr).append('<td><img class="cardImg" id=' + i + ' src="' + IMG_PATH + 'background.png"/></td>');
 	}
 	cardImgSizeChange(mapSize);
 }
 
 function makeCards(cards) {
 	var randomId = [];
+	var cardCount = 283;
+	
 	for(var i = 1; i <= mapSize; i++) {
 		cards[i] = {
 			sequence : i,
 			id : '',
-			isEvert : true
+			isEvert : false
 		};
 	}
 	for(var i = 1; i <= mapSize / 2; i++) {
 
-		randomId[i] = random(283);
+		randomId[i] = random(cardCount);
 		for(var j = 1; j <= mapSize / 2; j++) {
 			if(i != j && randomId[i] == randomId[j]) {
 				i--;
@@ -125,13 +154,13 @@ function showCard(id, atrributeValue, fadeOutSpeed, fadeInSpeed) {
 	$('#' + id).fadeIn(fadeInSpeed);
 }
 
-function random(randomSize) {
-	return Math.ceil(Math.random() * randomSize);
+function random(cardCount) {
+	return Math.ceil(Math.random() * cardCount);
 }
 
 function checkFinishGame(cards, startTime) {
 	for(var i = 1; i <= mapSize; i++) {
-		if(cards[i].isEvert == false) {
+		if(cards[i].isEvert) {
 			if(i == mapSize) {
 				clearTimeout(passGameTime.id);
 				saveResult();
