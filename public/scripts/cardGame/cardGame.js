@@ -12,12 +12,12 @@ $(document).ready(function() {
 	bindGetScoreBtn();
 });
 var mapSize;
-var IMG_PATH = "/images/cardGame/";
+var IMG_PATH = '/images/cardGame/';
 var passGameTime = {
 	'id' : '',
 	'second' : 0
 };
-var isDevelop = false;
+var isDevelop = true;
 
 function start() {
 
@@ -83,12 +83,7 @@ function start() {
 		var sequence = this.id;
 		if(!cards[sequence].isEvert) {
 			cards[sequence].isEvert = true;
-			if(!isDevelop) {
-				showCard(sequence, IMG_PATH + cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
-			} else {
-				showCard(cards[sequence].sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
-			}
-
+			showCard(cards[sequence].sequence, 'background', fadeOutSpeed, fadeInSpeed);
 			if(!check.id) {
 				check.id = cards[sequence].id;
 				check.sequence = sequence;
@@ -97,21 +92,13 @@ function start() {
 				if(check.id == cards[sequence].id) {
 					checkFinishGame(cards, startTime);
 				} else {
-					if(!isDevelop) {
-						showCard(cards[sequence].sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+					showCard(cards[sequence].sequence, cards[sequence].id, fadeOutSpeed, fadeInSpeed);
 					$('#' + check.sequence).delay(delaySpeed);
-					showCard(check.sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
-					} else {
-						showCard(cards[sequence].sequence, IMG_PATH + cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
-					$('#' + check.sequence).delay(delaySpeed);
-					showCard(check.sequence, IMG_PATH + cards[check.sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
-					}
-
-					
+					showCard(check.sequence, cards[check.sequence].id, fadeOutSpeed, fadeInSpeed);
 					cards[sequence].isEvert = false;
 					cards[check.sequence].isEvert = false;
 				}
-				check.id = "";
+				check.id = '';
 			}
 		}
 	});
@@ -120,12 +107,13 @@ function start() {
 function drawMap() {
 	$('#gameMap').children().remove();
 	mapSize = $('#selectMapSize').val();
+	var backgroundImgSrc = IMG_PATH + 'background.png';
 	for(var i = 1; i <= mapSize; i++) {
 		if(i % Math.pow(mapSize, 0.5) == 1) {
 			var tr = $('<tr/>');
 			$('#gameMap').append(tr);
 		}
-		$(tr).append('<td><img class="cardImg" id=' + i + ' src="' + IMG_PATH + 'background.png"/></td>');
+		$(tr).append('<td><img class="cardImg" id=' + i + ' src="' + backgroundImgSrc + '"/></td>');
 	}
 	cardImgSizeChange(mapSize);
 }
@@ -167,6 +155,7 @@ function makeCards(cards) {
 }
 
 function showCard(id, atrributeValue, fadeOutSpeed, fadeInSpeed) {
+	atrributeValue = IMG_PATH + atrributeValue + '.png';
 	$('#' + id).fadeOut(fadeOutSpeed, function() {
 		$('#' + id).attr('src', atrributeValue);
 	});
@@ -191,16 +180,18 @@ function checkFinishGame(cards, startTime) {
 }
 
 function saveResult() {
-	var userName = prompt("게임을 완료하였습니다. 아이디를 입력하여 주세요.");
+	var userName = prompt('게임을 완료하였습니다. 아이디를 입력하여 주세요.');
+	if ( !userName ){
+		userName = '___';
+	}
 	var url = '/game/card/saveScore';
-	alert(passGameTime.second);
 	var param = {};
 	param.userName = userName;
 	param.clearTime = passGameTime.second;
 
 	$.get(url, param, function(result) {
 		if(result) {
-			alert('저장되었습니다.');
+			alert('클리어시간이 저장되었습니다.');
 		} else {
 			alert('저장을 실패하였습니다.');
 		}
@@ -211,11 +202,7 @@ function showAllCards(cards) {
 	var fadeInSpeed = 1000;
 	var fadeOutSpeed = 500;
 	for(var i = 1; i <= mapSize; i++) {
-		showCard(i, IMG_PATH + cards[i].id + ".png", fadeOutSpeed, fadeInSpeed);
-		if(!isDevelop) {
-			showCard(i, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
-		}
-
+		showCard(i, cards[i].id, fadeOutSpeed, fadeInSpeed);
 	}
 }
 
@@ -236,31 +223,41 @@ function passTime() {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 function bindGetScoreBtn() {
-	$('#scoreBtn').click(function() {
+	$('#rankBtn').one('click', function() {
 		getScoreList(appendScoreList);
+		$('#rankBtn').click(function(){
+			$('#scoreArea').toggle();	
+		});
+		
 	});
 }
 
 function getScoreList(appendScoreList) {
 	var url = '/game/card/findScore';
 	$.get(url, function(resultSet) {
-
 		var scoreObjList = [];
 		for(var i = 0, max = resultSet.length; i < max; i++) {
 			var scoreObj = {};
 			scoreObj.userName = resultSet[i].userName;
 			scoreObj.clearTime = resultSet[i].clearTime;
 			scoreObj.regDate = new Date(resultSet[i].regDate).toLocaleString();
-
 			scoreObjList.push(scoreObj);
-
-			appendScoreList(scoreObjList);
 		}
+		appendScoreList(scoreObjList);
 	});
 }
 
 function appendScoreList(scoreObjList) {
 	console.dir(scoreObjList);
+	if ( scoreObjList.length < 1){
+		alert('저장된 점수가 없습니다.');
+	}else {
+		for( var index in scoreObjList ){
+			var score = scoreObjList[index];
+			var html = '<li><span>' + score.userName + '</span><span>' + ' : ' + score.clearTime + ' 초 </span>' + '</li>'; 
+			$('#scoreArea').append(html);
+		}
+	}
 	// HTML TABLE 에 데이터 뿌리기 결과 있는경우 와 없는 경우 고려 ex) scoreObjList.length 체크
 }
 

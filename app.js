@@ -90,7 +90,7 @@ app.get('/game/card/saveScore', function(req, res){
 
 app.get('/game/card/findScore', function(req, res){
 	var query = Score.find();
-	query.asc('clearTime').run(function(err, scoreList){
+	query.asc('clearTime').limit(20).run(function(err, scoreList){
 		if( err ){
 			res.send(false);
 		}else{
