@@ -13,10 +13,14 @@ $(document).ready(function() {
 });
 var mapSize;
 var IMG_PATH = "/images/cardGame/";
-var passGameTime = {'id': '','second':0};
+var passGameTime = {
+	'id' : '',
+	'second' : 0
+};
+var isDevelop = false;
 
 function start() {
-	
+
 	//게임맵을 그림
 
 	drawMap();
@@ -35,25 +39,56 @@ function start() {
 
 	clearTimeout(passGameTime.id);
 	passGameTime.second = 0;
-	appendTimeArea(); // p태그 time 경과시간 엘리먼트 append
-	passTime(); // 시간 경과 시작
+	appendTimeArea();
+	// p태그 time 경과시간 엘리먼트 append
+	passTime();
+	// 시간 경과 시작
 	var startTime = new Date().getTime();
 
 	//카드 아이디 보여주기 (삭제예정)
 	for(var i = 1; i <= mapSize; i++) {
 		console.log(cards[i].id);
 	}
-	
+
 	var fadeInSpeed = 100;
 	var fadeOutSpeed = 100;
 	var delaySpeed = fadeInSpeed + fadeOutSpeed;
-	$('.cardImg').delegate('', 'click', function(event){
-		//alert('클릭됨');
-		event.stopPropagation();
+	// $('.cardImg').delegate('', 'click', function(event){
+	// //alert('클릭됨');
+	// event.stopPropagation();
+	// var sequence = this.id;
+	// if(!cards[sequence].isEvert) {
+	// cards[sequence].isEvert = true;
+	// showCard(sequence, IMG_PATH + cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
+	// if(!check.id) {
+	// check.id = cards[sequence].id;
+	// check.sequence = sequence;
+	// } else {
+	// //$('#' + check.sequence).delay(delaySpeed);
+	// if(check.id == cards[sequence].id) {
+	// checkFinishGame(cards, startTime);
+	// } else {
+	// showCard(cards[sequence].sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+	// $('#' + check.sequence).delay(delaySpeed);
+	// showCard(check.sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+	// cards[sequence].isEvert = false;
+	// cards[check.sequence].isEvert = false;
+	// }
+	// check.id = "";
+	// }
+	// }
+	// });
+	$('.cardImg').click(function(event) {
+
 		var sequence = this.id;
 		if(!cards[sequence].isEvert) {
 			cards[sequence].isEvert = true;
-			showCard(sequence, IMG_PATH + cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
+			if(!isDevelop) {
+				showCard(sequence, IMG_PATH + cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
+			} else {
+				showCard(cards[sequence].sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+			}
+
 			if(!check.id) {
 				check.id = cards[sequence].id;
 				check.sequence = sequence;
@@ -62,9 +97,17 @@ function start() {
 				if(check.id == cards[sequence].id) {
 					checkFinishGame(cards, startTime);
 				} else {
-					showCard(cards[sequence].sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+					if(!isDevelop) {
+						showCard(cards[sequence].sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
 					$('#' + check.sequence).delay(delaySpeed);
 					showCard(check.sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+					} else {
+						showCard(cards[sequence].sequence, IMG_PATH + cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
+					$('#' + check.sequence).delay(delaySpeed);
+					showCard(check.sequence, IMG_PATH + cards[check.sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
+					}
+
+					
 					cards[sequence].isEvert = false;
 					cards[check.sequence].isEvert = false;
 				}
@@ -72,30 +115,6 @@ function start() {
 			}
 		}
 	});
-	// $('img').click(function(event) {
-// 		
-		// var sequence = this.id;
-		// if(!cards[sequence].isEvert) {
-			// cards[sequence].isEvert = true;
-			// showCard(sequence, IMG_PATH + cards[sequence].id + ".png", fadeOutSpeed, fadeInSpeed);
-			// if(!check.id) {
-				// check.id = cards[sequence].id;
-				// check.sequence = sequence;
-			// } else {
-				// //$('#' + check.sequence).delay(delaySpeed);
-				// if(check.id == cards[sequence].id) {
-					// checkFinishGame(cards, startTime);
-				// } else {
-					// showCard(cards[sequence].sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
-					// $('#' + check.sequence).delay(delaySpeed);
-					// showCard(check.sequence, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
-					// cards[sequence].isEvert = false;
-					// cards[check.sequence].isEvert = false;
-				// }
-				// check.id = "";
-			// }
-		// }
-	// });
 }
 
 function drawMap() {
@@ -114,7 +133,7 @@ function drawMap() {
 function makeCards(cards) {
 	var randomId = [];
 	var cardCount = 283;
-	
+
 	for(var i = 1; i <= mapSize; i++) {
 		cards[i] = {
 			sequence : i,
@@ -193,12 +212,15 @@ function showAllCards(cards) {
 	var fadeOutSpeed = 500;
 	for(var i = 1; i <= mapSize; i++) {
 		showCard(i, IMG_PATH + cards[i].id + ".png", fadeOutSpeed, fadeInSpeed);
-		showCard(i, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+		if(!isDevelop) {
+			showCard(i, IMG_PATH + "background.png", fadeOutSpeed, fadeInSpeed);
+		}
+
 	}
 }
 
-function appendTimeArea(){
-	if ( $('#time').length > 0 ){
+function appendTimeArea() {
+	if($('#time').length > 0) {
 		return;
 	}
 	var clearTime = $('<span/>').attr('id', 'time');
