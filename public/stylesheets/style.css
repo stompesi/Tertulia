@@ -13,5 +13,10 @@ article {
 }
 
 .content {
-	height : 500px;
+	
+}
+
+footer {
+	clear : both;
+	border : 1px solid black;
 }

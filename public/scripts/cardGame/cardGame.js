@@ -48,7 +48,7 @@ function start() {
 	var fadeOutSpeed = 100;
 	var delaySpeed = fadeInSpeed + fadeOutSpeed;
 	$('.cardImg').delegate('', 'click', function(event){
-		alert('클릭됨');
+		//alert('클릭됨');
 		event.stopPropagation();
 		var sequence = this.id;
 		if(!cards[sequence].isEvert) {
